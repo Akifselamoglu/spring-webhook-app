@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.api.constants.MessageSource;
 import com.example.demo.domain.Blacklist;
 import com.example.demo.domain.Contact;
+import com.example.demo.domain.Message;
 import com.example.demo.domain.User;
 import com.example.demo.dto.MessageRequestDTO;
 import com.example.demo.dto.WebhookMessageDTO;
@@ -70,7 +72,9 @@ public class MessageCommandServiceTest {
         webhookMessageDTO.setName("name");
         webhookMessageDTO.setText("message");
         webhookMessageDTO.setEmail("email@superchat");
-        messageCommandService.webhookMessage(webhookMessageDTO, any(), any(User.class));
+        User user = new User();
+        Message message = new Message(webhookMessageDTO.getText(), MessageSource.OUTWARD, webhookMessageDTO.getIpAddress(), user);
+        messageCommandService.webhookMessage(webhookMessageDTO, webhookMessageDTO.getIpAddress(), user);
         Mockito.verify(messageRepository, Mockito.atLeastOnce()).save(any());
     }
 }

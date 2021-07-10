@@ -43,16 +43,18 @@ public class ContactCommandServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void save_test_userEmpty(){
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.empty());
-        contactCommandService.save(any());
+        ContactRequestDTO requestDTO = new ContactRequestDTO();
+        requestDTO.setUserId(1L);
+        Mockito.when(userRepository.findById(requestDTO.getUserId())).thenReturn(Optional.empty());
+        contactCommandService.save(requestDTO);
     }
 
     @Test(expected = RuntimeException.class)
     public void save_test_contactCreatedBefore(){
         ContactRequestDTO requestDTO = new ContactRequestDTO();
         requestDTO.setUserId(1L);
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(new User()));
-        Mockito.when(contactRepository.findByEmailAndUserId(any(), any())).thenReturn(null);
-        contactCommandService.save(any());
+        Mockito.when(userRepository.findById(requestDTO.getUserId())).thenReturn(Optional.of(new User()));
+        Mockito.when(contactRepository.findByEmailAndUserId(any(), any())).thenReturn(new Contact());
+        contactCommandService.save(requestDTO);
     }
 }

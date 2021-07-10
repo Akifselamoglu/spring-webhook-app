@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.domain.Blacklist;
 import com.example.demo.domain.User;
 import com.example.demo.domain.Webhook;
+import com.example.demo.dto.WebhookMessageDTO;
 import com.example.demo.dto.WebhookRequestDTO;
 import com.example.demo.dto.WebhookResponseDTO;
 import com.example.demo.repository.BlacklistRepository;
@@ -53,13 +54,16 @@ public class WebhookServiceTest {
     public void webhookMessageProcessor_test(){
         Webhook webhook = new Webhook();
         webhook.setStatus(true);
-        Mockito.when(webhookRepository.findBySecretKey(any())).thenReturn(webhook);
+        webhook.setSecretKey("key");
+        webhook.setUser(new User());
+        Mockito.when(webhookRepository.findBySecretKey(webhook.getSecretKey())).thenReturn(webhook);
 
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.put("host", Collections.emptyList());
-
-        webhookService.webhookMessageProcessor(any(), any(), multiValueMap);
-        Mockito.verify(messageCommandService, Mockito.atLeastOnce()).webhookMessage(any(), any(), any());
+        String ipAddress = "ip";
+        multiValueMap.put("host", Arrays.asList(ipAddress));
+        WebhookMessageDTO messageDTO = new WebhookMessageDTO();
+        webhookService.webhookMessageProcessor(messageDTO, webhook.getSecretKey(), multiValueMap);
+        Mockito.verify(messageCommandService, Mockito.atLeastOnce()).webhookMessage(messageDTO, ipAddress, webhook.getUser());
     }
 
     @Test(expected = RuntimeException.class)
