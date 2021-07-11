@@ -3,19 +3,12 @@ package com.example.demo.api.controller;
 import com.example.demo.api.constants.ApiGroups;
 import com.example.demo.dto.MessageRequestDTO;
 import com.example.demo.dto.MessageResponseDTO;
-import com.example.demo.dto.WebhookMessageDTO;
 import com.example.demo.service.MessageCommandService;
 import com.example.demo.service.MessageQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 import static com.example.demo.api.constants.ApiGroups.RESPONSE_CONTENT_TYPE;

@@ -15,14 +15,30 @@ spring.datasource.password=password
 
 ## There are three main API groups
 After run application open `localhost:8080/swagger-ui/` on the browser to try APIs
+
+All API requests have own javax.validation annotations and its description. ``@Email(message = "Email is not valid")``
+
 ### webhook-api
 | **Name** | **Address**|**Description**|
 |----------|------------|---------------|
 |webhookMessageProcessor|/chat/webhook/api/{secretKey}|Send message to client that has secretKey|
 |genereteKey|/chat/webhook/generatekey|Generate new secret key for webhook api|
 
+##### Webhook Sample JSON
+```
+{
+  "email": "string",
+  "ipAddress": "string",
+  "name": "string",
+  "phone": "string",
+  "text": "string"
+}
+```
+```
+text, email and name are required body parameters
 
-
+secretKey is required path variable
+```
 ### message-api
 | **Name** | **Address**|**Description**|
 |----------|------------|---------------|

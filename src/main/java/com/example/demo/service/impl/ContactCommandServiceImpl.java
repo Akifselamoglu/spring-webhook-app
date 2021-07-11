@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.domain.Contact;
 import com.example.demo.domain.User;
+import com.example.demo.dto.ContactDTO;
 import com.example.demo.dto.ContactRequestDTO;
 import com.example.demo.repository.ContactRepository;
 import com.example.demo.repository.UserRepository;
@@ -31,11 +32,14 @@ public class ContactCommandServiceImpl implements ContactCommandService {
         Optional<User> user = userRepository.findById(requestDTO.getUserId());
         if(user.isEmpty())
             throw new RuntimeException("User is not found");
-        if(contactRepository.findByEmailAndUserId(requestDTO.getEmail(), requestDTO.getUserId()) != null)
-            throw new RuntimeException("This contact already created before");
 
-        Contact contact = new Contact(requestDTO.getName(), requestDTO.getEmail(), requestDTO.getPhoneNumber(), user.get());
-        contactRepository.save(contact);
-        LOG.info("Contact succesfully created for user: " + user.get().getName());
+        for (ContactDTO contactDTO : requestDTO.getContactList()) {
+            if(contactRepository.findByEmailAndUserId(contactDTO.getEmail(), requestDTO.getUserId()) != null)
+                throw new RuntimeException("This contact already created before");
+
+            Contact contact = new Contact(contactDTO.getName(), contactDTO.getEmail(), contactDTO.getPhoneNumber(), user.get());
+            contactRepository.save(contact);
+        }
+        LOG.info("All contacts are succesfully created for user: " + user.get().getName());
     }
 }

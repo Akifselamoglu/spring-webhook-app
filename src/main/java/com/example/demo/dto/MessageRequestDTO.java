@@ -9,11 +9,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class MessageRequestDTO extends BaseDTO{
-    @NotNull
+    @NotNull(message = "Text cannot be null")
     private String text;
-    @NotNull
+    @NotNull(message = "User id cannot be null")
     private Long userId;
-    @NotNull
+    @NotNull(message = "Contact id cannot be null")
     private Long contactId;
     @NotNull
     private MessageDirection messageDirection;
