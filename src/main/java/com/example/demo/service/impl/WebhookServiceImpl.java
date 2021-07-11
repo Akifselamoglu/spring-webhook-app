@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.api.handler.ValidationException;
 import com.example.demo.domain.User;
 import com.example.demo.domain.Webhook;
 import com.example.demo.dto.WebhookMessageDTO;
@@ -40,11 +41,11 @@ public class WebhookServiceImpl implements WebhookService {
     public void webhookMessageProcessor(WebhookMessageDTO messageDTO, String secretKey, MultiValueMap<String, String> headerMap) {
         Webhook webhook = webhookRepository.findBySecretKey(secretKey);
         if(webhook==null || !webhook.isStatus())
-            throw new RuntimeException("There is no active webhook user with this secret key " + secretKey);
+            throw new ValidationException("There is no active webhook user with this secret key " + secretKey,LOG);
 
         String ipAddress = headerMap.getFirst("host");
         if(blacklistRepository.findByIpAddressAndStatus(ipAddress, true)!=null)
-            throw new RuntimeException("This ip does not have access authorization");
+            throw new ValidationException("This ip does not have access authorization",LOG);
 
         messageCommandService.webhookMessage(messageDTO, ipAddress, webhook.getUser());
     }
@@ -52,7 +53,7 @@ public class WebhookServiceImpl implements WebhookService {
     public WebhookResponseDTO generate(WebhookRequestDTO requestDTO){
         Optional<User> user = userRepository.findById(requestDTO.getUserId());
         if(user.isEmpty())
-            throw new RuntimeException("User is not found");
+            throw new ValidationException("User is not found",LOG);
 
         Webhook webhook = new Webhook(UUID.randomUUID().toString().replaceAll("-",""), user.get(), true);
         webhookRepository.save(webhook);

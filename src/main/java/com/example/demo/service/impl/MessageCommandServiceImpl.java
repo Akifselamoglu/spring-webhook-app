@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.api.constants.MessageSource;
+import com.example.demo.api.handler.ValidationException;
 import com.example.demo.domain.Contact;
 import com.example.demo.domain.Message;
 import com.example.demo.domain.User;
@@ -38,11 +39,11 @@ public class MessageCommandServiceImpl implements MessageCommandService {
     public void send(MessageRequestDTO messageRequestDTO) {
         Optional<User> user = userRepository.findById(messageRequestDTO.getUserId());
         if (user.isEmpty())
-            throw new RuntimeException("User not found");
+            throw new ValidationException("User not found", LOG);
 
         Optional<Contact> contact = contactRepository.findById(messageRequestDTO.getContactId());
         if (contact.isEmpty())
-            throw new RuntimeException("Contact not found");
+            throw new ValidationException("Contact not found", LOG);
 
         String text = placeholderHelper.messageProecessor(messageRequestDTO.getText(), contact.get());
 

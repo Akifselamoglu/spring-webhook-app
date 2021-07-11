@@ -1,10 +1,14 @@
 package com.example.demo.helper;
 
+import com.example.demo.api.handler.ValidationException;
 import com.example.demo.domain.Contact;
+import com.example.demo.service.impl.ContactCommandServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -23,6 +27,8 @@ import static com.example.demo.api.constants.Constants.Placeholder.*;
 
 @Component
 public class PlaceholderHelper {
+    private static Logger LOG = LoggerFactory.getLogger(PlaceholderHelper.class);
+
     public static final String COIN_PRICE_API_ADDRESS = "https://api.coindesk.com/v1/bpi/currentprice.json";
     final Pattern pattern = Pattern.compile("#\\w+");
 
@@ -66,7 +72,7 @@ public class PlaceholderHelper {
             String replacement = rootNode.path("bpi").path("USD").get("rate").toString();
             return message.replaceAll(BITCOINPRICE, replacement);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Bitcoin placeholder not processed and message sending stopped. Please try again late.");
+            throw new ValidationException("Bitcoin placeholder not processed and message sending stopped. Please try again late.",LOG);
         }
     }
 

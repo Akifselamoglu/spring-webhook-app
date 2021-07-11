@@ -7,6 +7,7 @@ import com.example.demo.service.MessageCommandService;
 import com.example.demo.service.MessageQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class MessageController {
 
     @PostMapping(value="/send")
     @ApiOperation(value = "sendMessage", notes = "Send message to specific contact")
-    public void sendMessage(@RequestBody MessageRequestDTO requestDTO){
+    public void sendMessage(@Validated @RequestBody MessageRequestDTO requestDTO){
         messageCommandService.send(requestDTO);
     }
 

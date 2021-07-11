@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.api.handler.ValidationException;
 import com.example.demo.domain.Contact;
 import com.example.demo.domain.User;
 import com.example.demo.dto.ContactDTO;
@@ -31,7 +32,7 @@ public class ContactCommandServiceImpl implements ContactCommandService {
     public void save(ContactRequestDTO requestDTO){
         Optional<User> user = userRepository.findById(requestDTO.getUserId());
         if(user.isEmpty())
-            throw new RuntimeException("User is not found");
+            throw new ValidationException("User is not found",LOG);
 
         for (ContactDTO contactDTO : requestDTO.getContactList()) {
             if(contactRepository.findByEmailAndUserId(contactDTO.getEmail(), requestDTO.getUserId()) != null)

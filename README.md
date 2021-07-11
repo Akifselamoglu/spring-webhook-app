@@ -5,6 +5,7 @@ This repo is for simple chat application and developed by SpringBoot.
 Before start please check first application.properties file located under `/main/resource/` and you can edit database configuration.
 
 Please do not forget to change for initial DDL data insert `spring.datasource.initialization-mode=always` to `never` after first run.
+
 ````
 # Database Properties
 spring.datasource.url=jdbc:postgresql://localhost:9191/postgres?currentSchema=schema
@@ -16,7 +17,7 @@ spring.datasource.password=password
 ## There are three main API groups
 After run application open `localhost:8080/swagger-ui/` on the browser to try APIs
 
-All API requests have own javax.validation annotations and its description. ``@Email(message = "Email is not valid")``
+All API request object have own javax.validation annotations and its description for validation. ``@Email(message = "Email is not valid")``
 
 ### webhook-api
 | **Name** | **Address**|**Description**|

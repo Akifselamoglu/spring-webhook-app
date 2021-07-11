@@ -8,6 +8,7 @@ import com.example.demo.service.ContactQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ContactController {
 
     @PostMapping(value="/create")
     @ApiOperation(value = "", notes = "Create contact list for specified user")
-    public void createContact(@RequestBody ContactRequestDTO requestDTO){
+    public void createContact(@Validated @RequestBody ContactRequestDTO requestDTO){
         contactCommandService.save(requestDTO);
     }
 
