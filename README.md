@@ -1,4 +1,4 @@
-# Superchat Challenge
+# Webhook App
 
 This repo is for simple chat application and developed by SpringBoot.
 
